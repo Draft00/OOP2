@@ -1,4 +1,4 @@
-#include "Graph.h"
+п»ї#include "Graph.h"
 
 Graph_NetPlanning::Graph_NetPlanning(int s_time)
 {
@@ -68,7 +68,7 @@ void Graph_NetPlanning::print_answer() const
 
 void Graph_NetPlanning::get_sources(void)
 {
-	for (int i = 0; i < adjacency_list.size(); i++) { //добавляю стартовые стоки, чтобы из них выбрать предка для t и ответ
+	for (int i = 0; i < adjacency_list.size(); i++) { //РґРѕР±Р°РІР»СЏСЋ СЃС‚Р°СЂС‚РѕРІС‹Рµ СЃС‚РѕРєРё, С‡С‚РѕР±С‹ РёР· РЅРёС… РІС‹Р±СЂР°С‚СЊ РїСЂРµРґРєР° РґР»СЏ t Рё РѕС‚РІРµС‚
 		if (adjacency_list[i].size() == 1) {
 			veh.push_back(adjacency_list[i][0]);
 		}
@@ -111,7 +111,7 @@ void Graph_NetPlanning::get_new_num_vertex(void)
 		else i++;
 	}
 
-	for (int i = 0; i < vertex_num + 1; i++) //теперь индекс новой веришны - ее старый номер
+	for (int i = 0; i < vertex_num + 1; i++) //С‚РµРїРµСЂСЊ РёРЅРґРµРєСЃ РЅРѕРІРѕР№ РІРµСЂРёС€РЅС‹ - РµРµ СЃС‚Р°СЂС‹Р№ РЅРѕРјРµСЂ
 	{
 		int index = vertex[i].new_num - 1;
 		vertex[index].new_ind_old_val = i + 1;
@@ -121,7 +121,7 @@ void Graph_NetPlanning::get_new_num_vertex(void)
 void Graph_NetPlanning::get_ebeg_efin(void)
 {
 	int max_weigh = -1;
-	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
+	int old_num = 0, new_ind = 0; //РЅРѕРјРµСЂ РІРµСЂС€РёРЅС‹ РІ СЃС‚Р°СЂС‹С… РЅРѕРјРµСЂР°С… Рё РёРЅРґРµРєСЃ РЅРѕРІРѕР№ РІРµСЂС€РёРЅС‹
 	for (int i = 0; i < veh.size(); i++)
 	{
 		new_ind = vertex[veh[i] - 1].new_num - 1;
@@ -141,7 +141,7 @@ void Graph_NetPlanning::get_time(void)
 {
 	vertex[0].ebeg = 0; vertex[0].efin = 0;
 
-	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
+	int old_num = 0, new_ind = 0; //РЅРѕРјРµСЂ РІРµСЂС€РёРЅС‹ РІ СЃС‚Р°СЂС‹С… РЅРѕРјРµСЂР°С… Рё РёРЅРґРµРєСЃ РЅРѕРІРѕР№ РІРµСЂС€РёРЅС‹
 	int min_time = INT_MAX;
 	for (int i = 2; i < vertex_num + 1; i++)
 	{
@@ -150,7 +150,7 @@ void Graph_NetPlanning::get_time(void)
 
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
-			if (adjacency_matrix[k][old_num] > 0) //просматриваем все входящие вершины. в матрице это числа, не равные 0 и -1
+			if (adjacency_matrix[k][old_num] > 0) //РїСЂРѕСЃРјР°С‚СЂРёРІР°РµРј РІСЃРµ РІС…РѕРґСЏС‰РёРµ РІРµСЂС€РёРЅС‹. РІ РјР°С‚СЂРёС†Рµ СЌС‚Рѕ С‡РёСЃР»Р°, РЅРµ СЂР°РІРЅС‹Рµ 0 Рё -1
 			{
 				int new_num_for_v = vertex[k - 1].new_num - 1;
 				min_time = min(min_time, vertex[new_num_for_v].efin);
@@ -160,10 +160,10 @@ void Graph_NetPlanning::get_time(void)
 
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
-			if (adjacency_matrix[k][old_num] != -1 && k != old_num) //все входящие дуги просматриваем
+			if (adjacency_matrix[k][old_num] != -1 && k != old_num) //РІСЃРµ РІС…РѕРґСЏС‰РёРµ РґСѓРіРё РїСЂРѕСЃРјР°С‚СЂРёРІР°РµРј
 			{
 				new_ind = vertex[k - 1].new_num - 1;
-				if (vertex[new_ind].efin + adjacency_matrix[k][old_num] > vertex[i - 1].efin) //если путь в вершину + дуга из вершины больше чем у нас сейчас время конца
+				if (vertex[new_ind].efin + adjacency_matrix[k][old_num] > vertex[i - 1].efin) //РµСЃР»Рё РїСѓС‚СЊ РІ РІРµСЂС€РёРЅСѓ + РґСѓРіР° РёР· РІРµСЂС€РёРЅС‹ Р±РѕР»СЊС€Рµ С‡РµРј Сѓ РЅР°СЃ СЃРµР№С‡Р°СЃ РІСЂРµРјСЏ РєРѕРЅС†Р°
 				{
 					vertex[i - 1].efin = vertex[new_ind].efin + adjacency_matrix[k][old_num];
 				}
@@ -191,20 +191,20 @@ void Graph_NetPlanning::get_critical_way(void)
 void Graph_NetPlanning::get_lbeg_lfin(void)
 {
 	int max_weigh = -1;
-	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
+	int old_num = 0, new_ind = 0; //РЅРѕРјРµСЂ РІРµСЂС€РёРЅС‹ РІ СЃС‚Р°СЂС‹С… РЅРѕРјРµСЂР°С… Рё РёРЅРґРµРєСЃ РЅРѕРІРѕР№ РІРµСЂС€РёРЅС‹
 
 	vertex[vertex_num].lbeg = time;
 	vertex[vertex_num].lfin = time;
 
-	for (int i = 0; i < veh.size(); i++) //для висячих вершин, потому что в матрице смежности нигде не указано, что после них идет добавленная работа t
+	for (int i = 0; i < veh.size(); i++) //РґР»СЏ РІРёСЃСЏС‡РёС… РІРµСЂС€РёРЅ, РїРѕС‚РѕРјСѓ С‡С‚Рѕ РІ РјР°С‚СЂРёС†Рµ СЃРјРµР¶РЅРѕСЃС‚Рё РЅРёРіРґРµ РЅРµ СѓРєР°Р·Р°РЅРѕ, С‡С‚Рѕ РїРѕСЃР»Рµ РЅРёС… РёРґРµС‚ РґРѕР±Р°РІР»РµРЅРЅР°СЏ СЂР°Р±РѕС‚Р° t
 	{
 		max_weigh = -1;
-		new_ind = vertex[veh[i] - 1].new_num - 1; //индекс висчей вершины в массиве
+		new_ind = vertex[veh[i] - 1].new_num - 1; //РёРЅРґРµРєСЃ РІРёСЃС‡РµР№ РІРµСЂС€РёРЅС‹ РІ РјР°СЃСЃРёРІРµ
 		vertex[new_ind].lfin = vertex[vertex_num].lfin;
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
-			//-max всех ребер
-			if (adjacency_matrix[k][veh[i]] > max_weigh) //смотрим все входящие
+			//-max РІСЃРµС… СЂРµР±РµСЂ
+			if (adjacency_matrix[k][veh[i]] > max_weigh) //СЃРјРѕС‚СЂРёРј РІСЃРµ РІС…РѕРґСЏС‰РёРµ
 			{
 				max_weigh = adjacency_matrix[k][veh[i]];
 				vertex[new_ind].lbeg = vertex[new_ind].lfin - max_weigh;
@@ -212,19 +212,19 @@ void Graph_NetPlanning::get_lbeg_lfin(void)
 		}
 	}
 
-	//здесь i уже индекс, а не номер, поэтому единичку не вычитаем
+	//Р·РґРµСЃСЊ i СѓР¶Рµ РёРЅРґРµРєСЃ, Р° РЅРµ РЅРѕРјРµСЂ, РїРѕСЌС‚РѕРјСѓ РµРґРёРЅРёС‡РєСѓ РЅРµ РІС‹С‡РёС‚Р°РµРј
 	for (int i = vertex_num - 1 - veh.size(); i >= 0; i--)
 	{
 		max_weigh = -1;
 		old_num = vertex[i].new_ind_old_val;
-		for (int k = 1; k < vertex_num + 1; k++) //находим время работы. ищем максимум по всем ВХОДЯЩИМ дугам
+		for (int k = 1; k < vertex_num + 1; k++) //РЅР°С…РѕРґРёРј РІСЂРµРјСЏ СЂР°Р±РѕС‚С‹. РёС‰РµРј РјР°РєСЃРёРјСѓРј РїРѕ РІСЃРµРј Р’РҐРћР”РЇР©РРњ РґСѓРіР°Рј
 			if (adjacency_matrix[k][old_num] > max_weigh)
 				max_weigh = adjacency_matrix[k][old_num];
 
-		//минимум из работ, которые следуют после
+		//РјРёРЅРёРјСѓРј РёР· СЂР°Р±РѕС‚, РєРѕС‚РѕСЂС‹Рµ СЃР»РµРґСѓСЋС‚ РїРѕСЃР»Рµ
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
-			if (adjacency_matrix[old_num][k] != -1 && old_num != k) //если из этой вершины есть работа ИСХОДЯЩИЕ ДУГИ СМОТРИМ
+			if (adjacency_matrix[old_num][k] != -1 && old_num != k) //РµСЃР»Рё РёР· СЌС‚РѕР№ РІРµСЂС€РёРЅС‹ РµСЃС‚СЊ СЂР°Р±РѕС‚Р° РРЎРҐРћР”РЇР©РР• Р”РЈР“Р РЎРњРћРўР РРњ
 			{
 				new_ind = vertex[k - 1].new_num - 1;
 				if (vertex[new_ind].lfin - adjacency_matrix[old_num][k] < vertex[i].lfin)
