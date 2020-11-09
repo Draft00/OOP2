@@ -142,9 +142,12 @@
     <ClInclude Include="Graph.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Di.cpp" />
+    <ClCompile Include="FF.cpp" />
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="Kruskal.cpp" />
+    <ClCompile Include="NetPlanning.cpp" />
     <ClCompile Include="Source.cpp" />
-    <ClCompile Include="TODO LIST.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
