@@ -1,4 +1,4 @@
-#include "Graph.h"
+п»ї#include "Graph.h"
 
 Graph_Ford_Falk::Graph_Ford_Falk()
 {
@@ -33,7 +33,7 @@ void Graph_Ford_Falk::make_solve()
 }
 void Graph_Ford_Falk::print_answer() const
 {
-	cout << "Source vertex № " << sourcev << ". " << "Drain vertex № " << destinationv << endl;
+	cout << "Source vertex в„– " << sourcev << ". " << "Drain vertex в„– " << destinationv << endl;
 	cout << "Max flow: ";
 	cout << maxFlow << endl;
 	print_flow_matrix();
@@ -94,15 +94,15 @@ void Graph_Ford_Falk::add_edge(void)
 		{
 			if (adjacency_matrix[i][j])
 			{
-				// Прямое ребро
-				edges[edgeCount].onEnd = j;                   // на конце прямого v
-				edges[edgeCount].nextEdge = firstEdge[i - 1];     // добавляем в начало списка для u
-				firstEdge[i - 1] = edgeCount;               // теперь начало списка - новое ребро
+				// РџСЂСЏРјРѕРµ СЂРµР±СЂРѕ
+				edges[edgeCount].onEnd = j;                   // РЅР° РєРѕРЅС†Рµ РїСЂСЏРјРѕРіРѕ v
+				edges[edgeCount].nextEdge = firstEdge[i - 1];     // РґРѕР±Р°РІР»СЏРµРј РІ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° РґР»СЏ u
+				firstEdge[i - 1] = edgeCount;               // С‚РµРїРµСЂСЊ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° - РЅРѕРІРѕРµ СЂРµР±СЂРѕ
 				edges[edgeCount++].capacity = adjacency_matrix[i][j];
-				// Обратное ребро
-				edges[edgeCount].onEnd = i;                   // на конце обратного u
-				edges[edgeCount].nextEdge = firstEdge[j - 1];     // добавляем в начало списка для v
-				firstEdge[j - 1] = edgeCount;               // теперь начало списка - новое ребро
+				// РћР±СЂР°С‚РЅРѕРµ СЂРµР±СЂРѕ
+				edges[edgeCount].onEnd = i;                   // РЅР° РєРѕРЅС†Рµ РѕР±СЂР°С‚РЅРѕРіРѕ u
+				edges[edgeCount].nextEdge = firstEdge[j - 1];     // РґРѕР±Р°РІР»СЏРµРј РІ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° РґР»СЏ v
+				firstEdge[j - 1] = edgeCount;               // С‚РµРїРµСЂСЊ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР° - РЅРѕРІРѕРµ СЂРµР±СЂРѕ
 				edges[edgeCount++].capacity = 0;
 			}
 		}
@@ -143,7 +143,7 @@ void Graph_Ford_Falk::count_edges(void)
 	for (int i = 1; i < vertex_num + 1; i++) {
 		for (int j = 1; j < vertex_num + 1; j++) {
 			if (adjacency_matrix[i][j]) {
-				double_edges_num += 2; //прямое и обратное
+				double_edges_num += 2; //РїСЂСЏРјРѕРµ Рё РѕР±СЂР°С‚РЅРѕРµ
 			}
 		}
 	}
@@ -151,26 +151,26 @@ void Graph_Ford_Falk::count_edges(void)
 
 int Graph_Ford_Falk::find_flow(int u, int flow)
 {
-	if (u == destinationv) return flow; // возвращяем полученный минимум на пути
+	if (u == destinationv) return flow; // РІРѕР·РІСЂР°С‰СЏРµРј РїРѕР»СѓС‡РµРЅРЅС‹Р№ РјРёРЅРёРјСѓРј РЅР° РїСѓС‚Рё
 	visited[u - 1] = true;
 	for (int idx_edge = firstEdge[u - 1]; idx_edge != -1; idx_edge = edges[idx_edge].nextEdge)
 	{
 		int to = edges[idx_edge].onEnd;
 		if (!visited[to - 1] && edges[idx_edge].capacity > 0)
 		{
-			int minResult = find_flow(to, std::min(flow, edges[idx_edge].capacity)); // ищем поток в поддереве
-			if (minResult > 0) {// если нашли
+			int minResult = find_flow(to, std::min(flow, edges[idx_edge].capacity)); // РёС‰РµРј РїРѕС‚РѕРє РІ РїРѕРґРґРµСЂРµРІРµ
+			if (minResult > 0) {// РµСЃР»Рё РЅР°С€Р»Рё
 				if (idx_edge % 2 == 0)
 				{
 					int idx_x = edges[idx_edge ^ 1].onEnd, idx_y = edges[idx_edge].onEnd;
 					flow_matr[idx_x][idx_y] += minResult;
 				}
-				edges[idx_edge].capacity -= minResult;   // у прямых ребер вычитаем поток
-				edges[idx_edge ^ 1].capacity += minResult;   // к обратным прибавляем //only ^ иначе там где-то расчет неверный на обратном ребре
+				edges[idx_edge].capacity -= minResult;   // Сѓ РїСЂСЏРјС‹С… СЂРµР±РµСЂ РІС‹С‡РёС‚Р°РµРј РїРѕС‚РѕРє
+				edges[idx_edge ^ 1].capacity += minResult;   // Рє РѕР±СЂР°С‚РЅС‹Рј РїСЂРёР±Р°РІР»СЏРµРј //only ^ РёРЅР°С‡Рµ С‚Р°Рј РіРґРµ-С‚Рѕ СЂР°СЃС‡РµС‚ РЅРµРІРµСЂРЅС‹Р№ РЅР° РѕР±СЂР°С‚РЅРѕРј СЂРµР±СЂРµ
 				return minResult;
 			}
 		}
 	}
-	return 0; // если не нашли поток из этой вершины - 0
+	return 0; // РµСЃР»Рё РЅРµ РЅР°С€Р»Рё РїРѕС‚РѕРє РёР· СЌС‚РѕР№ РІРµСЂС€РёРЅС‹ - 0
 
 }
