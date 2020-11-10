@@ -8,21 +8,21 @@ Graph_NetPlanning::~Graph_NetPlanning()
 {
 	if (vertex_num) {
 		delete[] m_vertex;
-		veh.clear();
-		adjacency_list.clear();
-		way.clear();
+		m_veh.clear();
+		m_adjacency_list.clear();
+		m_way.clear();
 	}
 }
 void Graph_NetPlanning::adj_to_list(void)
 {
 	for (int i = 1; i < vertex_num + 1; i++)
 	{
-		adjacency_list.push_back(std::vector<int>());
-		adjacency_list[i - 1].push_back(adjacency_matrix[i][0]);
+		m_adjacency_list.push_back(std::vector<int>());
+		m_adjacency_list[i - 1].push_back(adjacency_matrix[i][0]);
 		for (int j = 1; j < vertex_num + 1; j++)
 		{
 			if (adjacency_matrix[i][j] != -1 && i != j)
-				adjacency_list[i - 1].push_back(adjacency_matrix[j][0]);
+				m_adjacency_list[i - 1].push_back(adjacency_matrix[j][0]);
 		}
 	}
 }
@@ -54,9 +54,9 @@ void Graph_NetPlanning::print_answer() const
 {
 	cout << "Optimal plan = " << m_vertex[vertex_num].weigh << endl; //<< weigh[parent[vertex_num] - 1] << " " 
 	cout << "Critical rote. New num(old num): " << endl;
-	for (int i = way.size() - 1; i >= 0; i--)
+	for (int i = m_way.size() - 1; i >= 0; i--)
 	{
-		cout << way[i] << "(" << m_vertex[way[i] - 1].new_ind_old_val << ")" << " ";
+		cout << m_way[i] << "(" << m_vertex[m_way[i] - 1].new_ind_old_val << ")" << " ";
 	}
 	cout << endl;
 	cout << "new num - old num - ebeg - efin - lbeg - lfin - r :" << endl;
@@ -68,9 +68,9 @@ void Graph_NetPlanning::print_answer() const
 
 void Graph_NetPlanning::get_sources(void)
 {
-	for (int i = 0; i < adjacency_list.size(); i++) { //добавляю стартовые стоки, чтобы из них выбрать предка для t и ответ
-		if (adjacency_list[i].size() == 1) {
-			veh.push_back(adjacency_list[i][0]);
+	for (int i = 0; i < m_adjacency_list.size(); i++) { //добавляю стартовые стоки, чтобы из них выбрать предка для t и ответ
+		if (m_adjacency_list[i].size() == 1) {
+			m_veh.push_back(m_adjacency_list[i][0]);
 		}
 	}
 }
@@ -83,22 +83,22 @@ void Graph_NetPlanning::get_new_num_vertex(void)
 	int i = 0;
 	int number = vertex_num;
 	int rem_ver = 0;
-	while (adjacency_list.size() > 1)
+	while (m_adjacency_list.size() > 1)
 	{
-		if (adjacency_list[i].size() == 1)
+		if (m_adjacency_list[i].size() == 1)
 		{
-			rem_ver = adjacency_list[i][0];
+			rem_ver = m_adjacency_list[i][0];
 			m_vertex[rem_ver - 1].new_num = number;
 			number--;
-			adjacency_list[i].clear();
-			adjacency_list.erase(adjacency_list.begin() + i);
-			for (int j = 0; j < adjacency_list.size(); j++)
+			m_adjacency_list[i].clear();
+			m_adjacency_list.erase(m_adjacency_list.begin() + i);
+			for (int j = 0; j < m_adjacency_list.size(); j++)
 			{
-				for (int k = 1; k < adjacency_list[j].size(); k++)
+				for (int k = 1; k < m_adjacency_list[j].size(); k++)
 				{
-					if (adjacency_list[j][k] == rem_ver)
+					if (m_adjacency_list[j][k] == rem_ver)
 					{
-						adjacency_list[j].erase(adjacency_list[j].begin() + k);
+						m_adjacency_list[j].erase(m_adjacency_list[j].begin() + k);
 						k--;
 					}
 				}
@@ -106,7 +106,7 @@ void Graph_NetPlanning::get_new_num_vertex(void)
 			i--;
 			//print_adj_list();
 		}
-		if (i == adjacency_list.size() - 1)
+		if (i == m_adjacency_list.size() - 1)
 			i = 0;
 		else i++;
 	}
@@ -122,9 +122,9 @@ void Graph_NetPlanning::get_ebeg_efin(void)
 {
 	int max_weigh = -1;
 	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
-	for (int i = 0; i < veh.size(); i++)
+	for (int i = 0; i < m_veh.size(); i++)
 	{
-		new_ind = m_vertex[veh[i] - 1].new_num - 1;
+		new_ind = m_vertex[m_veh[i] - 1].new_num - 1;
 		if (m_vertex[new_ind].efin > m_vertex[vertex_num].efin)
 		{
 			m_vertex[vertex_num].efin = m_vertex[new_ind].efin;
@@ -180,12 +180,12 @@ void Graph_NetPlanning::get_time(void)
 
 void Graph_NetPlanning::get_critical_way(void)
 {
-	way.push_back(vertex_num);
+	m_way.push_back(vertex_num);
 	int temp = vertex_num;
 	while (temp != 1)
 	{
 		temp = m_vertex[temp - 1].parent;
-		way.push_back(temp);
+		m_way.push_back(temp);
 	}
 }
 void Graph_NetPlanning::get_lbeg_lfin(void)
@@ -196,24 +196,24 @@ void Graph_NetPlanning::get_lbeg_lfin(void)
 	m_vertex[vertex_num].lbeg = m_time;
 	m_vertex[vertex_num].lfin = m_time;
 
-	for (int i = 0; i < veh.size(); i++) //для висячих вершин, потому что в матрице смежности нигде не указано, что после них идет добавленная работа t
+	for (int i = 0; i < m_veh.size(); i++) //для висячих вершин, потому что в матрице смежности нигде не указано, что после них идет добавленная работа t
 	{
 		max_weigh = -1;
-		new_ind = m_vertex[veh[i] - 1].new_num - 1; //индекс висчей вершины в массиве
+		new_ind = m_vertex[m_veh[i] - 1].new_num - 1; //индекс висчей вершины в массиве
 		m_vertex[new_ind].lfin = m_vertex[vertex_num].lfin;
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
 			//-max всех ребер
-			if (adjacency_matrix[k][veh[i]] > max_weigh) //смотрим все входящие
+			if (adjacency_matrix[k][m_veh[i]] > max_weigh) //смотрим все входящие
 			{
-				max_weigh = adjacency_matrix[k][veh[i]];
+				max_weigh = adjacency_matrix[k][m_veh[i]];
 				m_vertex[new_ind].lbeg = m_vertex[new_ind].lfin - max_weigh;
 			}
 		}
 	}
 
 	//здесь i уже индекс, а не номер, поэтому единичку не вычитаем
-	for (int i = vertex_num - 1 - veh.size(); i >= 0; i--)
+	for (int i = vertex_num - 1 - m_veh.size(); i >= 0; i--)
 	{
 		max_weigh = -1;
 		old_num = m_vertex[i].new_ind_old_val;

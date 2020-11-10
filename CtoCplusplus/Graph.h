@@ -74,9 +74,6 @@ public:
 
 class Graph_NetPlanning : public Graph//, public IAction
 {
-	std::vector <int> veh;
-	std::vector<std::vector<int>> adjacency_list;
-	std::vector <int> way;
 
 public:
 	Graph_NetPlanning(int s_time);
@@ -86,6 +83,9 @@ public:
 private:
 	int m_time = 0;
 	NetPlanning_vertex* m_vertex;
+	std::vector <int> m_veh;
+	std::vector<std::vector<int>> m_adjacency_list;
+	std::vector <int> m_way;
 
 	void adj_to_list(void);
 	void get_new_num_vertex(void);
