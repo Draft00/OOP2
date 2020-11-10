@@ -3,4 +3,4 @@
 The program was tested on the previous year's tests (by me) and algorithms last year by the teacher.
 
 Graph_UML:
-![Graph_UML](https://github.com/Draft00/OOP2/blob/master/Graph_UML.png.PNG)
+![Graph_UML](https://github.com/Draft00/OOP2/blob/master/Graph_UML.png)
