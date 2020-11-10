@@ -4,3 +4,6 @@ The program was tested on the previous year's tests (by me) and algorithms last 
 
 Graph_UML:
 ![Graph_UML](https://github.com/Draft00/OOP2/blob/master/Graph_UML.png)
+
+Game_UML:
+![Game_UML](https://github.com/Draft00/OOP2/blob/master/Game_UML.png)
