@@ -2,12 +2,12 @@
 
 Graph_NetPlanning::Graph_NetPlanning(int s_time)
 {
-	time = s_time;
+	m_time = s_time;
 }
 Graph_NetPlanning::~Graph_NetPlanning()
 {
 	if (vertex_num) {
-		delete[] vertex;
+		delete[] m_vertex;
 		veh.clear();
 		adjacency_list.clear();
 		way.clear();
@@ -32,7 +32,7 @@ void Graph_NetPlanning::make_solve()
 	adj_to_list();
 	get_sources();
 
-	vertex = new NetPlanning_vertex[vertex_num + 1]();
+	m_vertex = new NetPlanning_vertex[vertex_num + 1]();
 
 	/*for (int i = 0; i < vertex_num + 1; i++)
 	{
@@ -52,17 +52,17 @@ void Graph_NetPlanning::make_solve()
 
 void Graph_NetPlanning::print_answer() const
 {
-	cout << "Optimal plan = " << vertex[vertex_num].weigh << endl; //<< weigh[parent[vertex_num] - 1] << " " 
+	cout << "Optimal plan = " << m_vertex[vertex_num].weigh << endl; //<< weigh[parent[vertex_num] - 1] << " " 
 	cout << "Critical rote. New num(old num): " << endl;
 	for (int i = way.size() - 1; i >= 0; i--)
 	{
-		cout << way[i] << "(" << vertex[way[i] - 1].new_ind_old_val << ")" << " ";
+		cout << way[i] << "(" << m_vertex[way[i] - 1].new_ind_old_val << ")" << " ";
 	}
 	cout << endl;
 	cout << "new num - old num - ebeg - efin - lbeg - lfin - r :" << endl;
 	for (int i = 0; i < vertex_num + 1; i++)
 	{
-		cout << i + 1 << " " << vertex[i].new_ind_old_val << " " << vertex[i].ebeg << " " << vertex[i].efin << " " << vertex[i].lbeg << " " << vertex[i].lfin << " " << vertex[i].r << endl;
+		cout << i + 1 << " " << m_vertex[i].new_ind_old_val << " " << m_vertex[i].ebeg << " " << m_vertex[i].efin << " " << m_vertex[i].lbeg << " " << m_vertex[i].lfin << " " << m_vertex[i].r << endl;
 	}
 }
 
@@ -77,8 +77,8 @@ void Graph_NetPlanning::get_sources(void)
 
 void Graph_NetPlanning::get_new_num_vertex(void)
 {
-	vertex[0].new_num = 1;
-	vertex[vertex_num].new_num = vertex_num + 1;
+	m_vertex[0].new_num = 1;
+	m_vertex[vertex_num].new_num = vertex_num + 1;
 
 	int i = 0;
 	int number = vertex_num;
@@ -88,7 +88,7 @@ void Graph_NetPlanning::get_new_num_vertex(void)
 		if (adjacency_list[i].size() == 1)
 		{
 			rem_ver = adjacency_list[i][0];
-			vertex[rem_ver - 1].new_num = number;
+			m_vertex[rem_ver - 1].new_num = number;
 			number--;
 			adjacency_list[i].clear();
 			adjacency_list.erase(adjacency_list.begin() + i);
@@ -113,8 +113,8 @@ void Graph_NetPlanning::get_new_num_vertex(void)
 
 	for (int i = 0; i < vertex_num + 1; i++) //теперь индекс новой веришны - ее старый номер
 	{
-		int index = vertex[i].new_num - 1;
-		vertex[index].new_ind_old_val = i + 1;
+		int index = m_vertex[i].new_num - 1;
+		m_vertex[index].new_ind_old_val = i + 1;
 	}
 }
 
@@ -124,54 +124,54 @@ void Graph_NetPlanning::get_ebeg_efin(void)
 	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
 	for (int i = 0; i < veh.size(); i++)
 	{
-		new_ind = vertex[veh[i] - 1].new_num - 1;
-		if (vertex[new_ind].efin > vertex[vertex_num].efin)
+		new_ind = m_vertex[veh[i] - 1].new_num - 1;
+		if (m_vertex[new_ind].efin > m_vertex[vertex_num].efin)
 		{
-			vertex[vertex_num].efin = vertex[new_ind].efin;
-			vertex[vertex_num].ebeg = vertex[vertex_num].efin;
+			m_vertex[vertex_num].efin = m_vertex[new_ind].efin;
+			m_vertex[vertex_num].ebeg = m_vertex[vertex_num].efin;
 		}
-		if (vertex[new_ind].weigh > vertex[vertex_num].weigh)
+		if (m_vertex[new_ind].weigh > m_vertex[vertex_num].weigh)
 		{
-			vertex[vertex_num].weigh = vertex[new_ind].weigh;
-			vertex[vertex_num].parent = new_ind + 1;
+			m_vertex[vertex_num].weigh = m_vertex[new_ind].weigh;
+			m_vertex[vertex_num].parent = new_ind + 1;
 		}
 	}
 }
 void Graph_NetPlanning::get_time(void)
 {
-	vertex[0].ebeg = 0; vertex[0].efin = 0;
+	m_vertex[0].ebeg = 0; m_vertex[0].efin = 0;
 
 	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
 	int min_time = INT_MAX;
 	for (int i = 2; i < vertex_num + 1; i++)
 	{
 		min_time = INT_MAX;
-		old_num = vertex[i - 1].new_ind_old_val;
+		old_num = m_vertex[i - 1].new_ind_old_val;
 
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
 			if (adjacency_matrix[k][old_num] > 0) //просматриваем все входящие вершины. в матрице это числа, не равные 0 и -1
 			{
-				int new_num_for_v = vertex[k - 1].new_num - 1;
-				min_time = min(min_time, vertex[new_num_for_v].efin);
+				int new_num_for_v = m_vertex[k - 1].new_num - 1;
+				min_time = min(min_time, m_vertex[new_num_for_v].efin);
 			}
 		}
-		vertex[i - 1].ebeg = min_time;
+		m_vertex[i - 1].ebeg = min_time;
 
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
 			if (adjacency_matrix[k][old_num] != -1 && k != old_num) //все входящие дуги просматриваем
 			{
-				new_ind = vertex[k - 1].new_num - 1;
-				if (vertex[new_ind].efin + adjacency_matrix[k][old_num] > vertex[i - 1].efin) //если путь в вершину + дуга из вершины больше чем у нас сейчас время конца
+				new_ind = m_vertex[k - 1].new_num - 1;
+				if (m_vertex[new_ind].efin + adjacency_matrix[k][old_num] > m_vertex[i - 1].efin) //если путь в вершину + дуга из вершины больше чем у нас сейчас время конца
 				{
-					vertex[i - 1].efin = vertex[new_ind].efin + adjacency_matrix[k][old_num];
+					m_vertex[i - 1].efin = m_vertex[new_ind].efin + adjacency_matrix[k][old_num];
 				}
 
-				if (vertex[new_ind].weigh + adjacency_matrix[k][old_num] > vertex[i - 1].weigh)
+				if (m_vertex[new_ind].weigh + adjacency_matrix[k][old_num] > m_vertex[i - 1].weigh)
 				{
-					vertex[i - 1].weigh = vertex[new_ind].weigh + adjacency_matrix[k][old_num];
-					vertex[i - 1].parent = new_ind + 1;
+					m_vertex[i - 1].weigh = m_vertex[new_ind].weigh + adjacency_matrix[k][old_num];
+					m_vertex[i - 1].parent = new_ind + 1;
 				}
 			}
 		}
@@ -184,7 +184,7 @@ void Graph_NetPlanning::get_critical_way(void)
 	int temp = vertex_num;
 	while (temp != 1)
 	{
-		temp = vertex[temp - 1].parent;
+		temp = m_vertex[temp - 1].parent;
 		way.push_back(temp);
 	}
 }
@@ -193,21 +193,21 @@ void Graph_NetPlanning::get_lbeg_lfin(void)
 	int max_weigh = -1;
 	int old_num = 0, new_ind = 0; //номер вершины в старых номерах и индекс новой вершины
 
-	vertex[vertex_num].lbeg = time;
-	vertex[vertex_num].lfin = time;
+	m_vertex[vertex_num].lbeg = m_time;
+	m_vertex[vertex_num].lfin = m_time;
 
 	for (int i = 0; i < veh.size(); i++) //для висячих вершин, потому что в матрице смежности нигде не указано, что после них идет добавленная работа t
 	{
 		max_weigh = -1;
-		new_ind = vertex[veh[i] - 1].new_num - 1; //индекс висчей вершины в массиве
-		vertex[new_ind].lfin = vertex[vertex_num].lfin;
+		new_ind = m_vertex[veh[i] - 1].new_num - 1; //индекс висчей вершины в массиве
+		m_vertex[new_ind].lfin = m_vertex[vertex_num].lfin;
 		for (int k = 1; k < vertex_num + 1; k++)
 		{
 			//-max всех ребер
 			if (adjacency_matrix[k][veh[i]] > max_weigh) //смотрим все входящие
 			{
 				max_weigh = adjacency_matrix[k][veh[i]];
-				vertex[new_ind].lbeg = vertex[new_ind].lfin - max_weigh;
+				m_vertex[new_ind].lbeg = m_vertex[new_ind].lfin - max_weigh;
 			}
 		}
 	}
@@ -216,7 +216,7 @@ void Graph_NetPlanning::get_lbeg_lfin(void)
 	for (int i = vertex_num - 1 - veh.size(); i >= 0; i--)
 	{
 		max_weigh = -1;
-		old_num = vertex[i].new_ind_old_val;
+		old_num = m_vertex[i].new_ind_old_val;
 		for (int k = 1; k < vertex_num + 1; k++) //находим время работы. ищем максимум по всем ВХОДЯЩИМ дугам
 			if (adjacency_matrix[k][old_num] > max_weigh)
 				max_weigh = adjacency_matrix[k][old_num];
@@ -226,11 +226,11 @@ void Graph_NetPlanning::get_lbeg_lfin(void)
 		{
 			if (adjacency_matrix[old_num][k] != -1 && old_num != k) //если из этой вершины есть работа ИСХОДЯЩИЕ ДУГИ СМОТРИМ
 			{
-				new_ind = vertex[k - 1].new_num - 1;
-				if (vertex[new_ind].lfin - adjacency_matrix[old_num][k] < vertex[i].lfin)
+				new_ind = m_vertex[k - 1].new_num - 1;
+				if (m_vertex[new_ind].lfin - adjacency_matrix[old_num][k] < m_vertex[i].lfin)
 				{
-					vertex[i].lfin = vertex[new_ind].lfin - adjacency_matrix[old_num][k];
-					vertex[i].lbeg = vertex[i].lfin - max_weigh;
+					m_vertex[i].lfin = m_vertex[new_ind].lfin - adjacency_matrix[old_num][k];
+					m_vertex[i].lbeg = m_vertex[i].lfin - max_weigh;
 				}
 			}
 		}
@@ -240,6 +240,6 @@ void Graph_NetPlanning::get_r(void)
 {
 	for (int i = 0; i < vertex_num + 1; i++)
 	{
-		vertex[i].r = vertex[i].lfin - vertex[i].efin;
+		m_vertex[i].r = m_vertex[i].lfin - m_vertex[i].efin;
 	}
 }

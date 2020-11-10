@@ -50,10 +50,10 @@ public:
 	~Graph_Dijkstra();
 
 private:
-	int start = 0;
-	int finish = 0;
-	Dijkstra_vertex* vertex;
-	std::vector <int> way;
+	int m_start = 0;
+	int m_finish = 0;
+	Dijkstra_vertex* m_vertex;
+	std::vector <int> m_way;
 };
 
 class NetPlanning_vertex {
@@ -84,8 +84,8 @@ public:
 	void print_answer() const override;
 	~Graph_NetPlanning();
 private:
-	int time = 0;
-	NetPlanning_vertex* vertex;
+	int m_time = 0;
+	NetPlanning_vertex* m_vertex;
 
 	void adj_to_list(void);
 	void get_new_num_vertex(void);
@@ -115,13 +115,13 @@ public:
 	~Graph_Ford_Falk();
 
 private:
-	int double_edges_num = 0;
-	FF_edge* edges = nullptr; 
-	int** flow_matr = nullptr;
-	int* firstEdge = nullptr;
-	bool* visited = nullptr;
-	int sourcev = 0, destinationv = 0; //исток, сток
-	int maxFlow = 0;
+	int m_double_edges_num = 0;
+	FF_edge* m_edges = nullptr; 
+	int** m_flow_matr = nullptr;
+	int* m_firstEdge = nullptr;
+	bool* m_visited = nullptr;
+	int m_sourcev = 0, m_destinationv = 0; //исток, сток
+	int m_maxFlow = 0;
 
 	void alloc_flow_matrix(void);
 	void add_edge(void);
@@ -138,8 +138,6 @@ public:
 	~Kr_edge() {};
 };
 
-bool cmp_edge(const Kr_edge& a, const Kr_edge& b);
-
 class Graph_Kruskal : public Graph//, public IAction 
 {
 public:
@@ -148,13 +146,14 @@ public:
 	void print_answer() const override;
 	~Graph_Kruskal();
 private:
-	std::vector <Kr_edge> edges;
-	int edges_count = 0;
-	bool w_or_adj = 1;
-	int** spanning_tree = nullptr;
-	int* connect_comp = nullptr; 
-	int w_sp = 0;
+	std::vector <Kr_edge> m_edges;
+	int m_edges_count = 0;
+	bool m_w_or_adj = 1;
+	int** m_spanning_tree = nullptr;
+	int* m_connect_comp = nullptr; 
+	int m_w_sp = 0;
 
+	static bool cmp_edge(const Kr_edge& a, const Kr_edge& b);
 	void get_edges(void);
 	void alloc_spanning_matrix(void);
 	bool not_same_con_com(int from, int to);
