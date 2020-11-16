@@ -1,4 +1,6 @@
 # README 
+.txt files are named the same as class objects for the algorithm.
+
 Time for NetPlanning: 55
 
 First and last vertex in Dij.: 1, 13
