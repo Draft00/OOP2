@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void get_answer(IAction& task)
+void get_answer(IAction& task) //it is not used because writing one line instead of two is not so effective
 {
 	task.make_solve();
 	task.print_answer();
@@ -31,7 +31,7 @@ int main()
 	case 0:
 		return 0;
 	case 1:
-	{ //w/out { switch ìtransfer of control bypasses initialization of:î when calling a function
+	{ //w/out { switch ‚Äútransfer of control bypasses initialization of:‚Äù when calling a function
 		int first = 1, last = 1;
 		cout << "Enter start vertex and end vertex via key ENTER" << endl;
 		cin >> first >> last;
