@@ -22,7 +22,7 @@ int main()
 	int choice = 0;
 
 	cout << "Welcome to programm \"Graph algorithms\"\n";
-	cout << "0 - exit.\n1 - Dijkstra.\n2 - NetPlannimg.\n3 - Ford Falkerson.\n4 - Kruskal.\n";
+	cout << "0 - exit.\n1 - Dijkstra.\n2 - NetPlanning.\n3 - Ford Falkerson.\n4 - Kruskal.\n";
 	cout << "Your choice: ";
 	cin >> choice;
 
@@ -71,8 +71,8 @@ int main()
 		cout << "Enter 1 if your matrix is weight matrix. Enter 0 if adjacency matrix\n";
 		cout << "Your choice: ";
 		cin >> choice;
-		if (choice != 1 && choice != 0)
-			exit(0);
+		//if (choice != 1 && choice != 0)
+			//exit(0);
 
 		enter_filename();
 		Graph_Kruskal g_kr(choice);
